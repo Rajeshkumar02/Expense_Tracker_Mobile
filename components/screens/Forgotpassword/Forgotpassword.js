@@ -1,6 +1,5 @@
-import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider } from "native-base";
+import { TextInput, View, StyleSheet, ScrollView, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
 
 //Validation
 import { Formik } from "formik";
@@ -34,7 +33,7 @@ function Forgotpassword({ navigation }) {
                         text2: 'No user Found'
                     });
                 } else {
-                    console.log(error,"Error has occured");
+                    console.log(error, "Error has occured");
                     Toast.show({
                         type: 'error',
                         text1: 'Error',
@@ -46,62 +45,58 @@ function Forgotpassword({ navigation }) {
     }
 
     return (
-        <NativeBaseProvider>
-            <Center>
-                <Center w="100%" height="100%">
-                    <Toast />
-                    <Box safeArea p="2" py="8" w="90%" maxW="290">
-                        <Heading size="xl" fontWeight="800" color="#EDEDED">
-                            Reset Your Password
-                        </Heading>
-                        <Heading mt="1" color="#BBBBBB" fontWeight="medium" size="xs">
-                            Type in your email and we'll send you a link to reset your password
-                        </Heading>
-                        <Formik
-                            initialValues={{ email: '' }}
-                            onSubmit={(values) => { Forgotpasswordfun(values) }}
-                            validationSchema={yup.object().shape({
-                                email: yup
-                                    .string()
-                                    .email()
-                                    .required('Email id is required')
-                            })}
-                        >
-                            {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
-                                <VStack space={3} mt="5">
-                                    <FormControl>
-                                        <FormControl.Label><Text style={{ color: "#BBBBBB" }}>Email</Text></FormControl.Label>
-                                        <TextInput
-                                            onChangeText={handleChange('email')}
-                                            onBlur={() => setFieldTouched('email')}
-                                            value={values.email}
-                                            style={styles.input}
-                                            placeholder="you@example.com"
-                                            placeholderTextColor="#707070" />
-                                        {touched.email && errors.email &&
-                                            <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.email}</Text>
-                                        }
-                                    </FormControl>
-                                    {error ? <Text style={{ fontSize: 15, color: '#FF0D10', textAlign: "center" }}>{error}</Text> : ""}
-                                    <Button
-                                        style={styles.button}
-                                        mt="2"
-                                        onPress={handleSubmit}>
-                                        <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Send Reset Email</Text>
-                                    </Button>
-                                    <HStack mt="6" justifyContent="center">
-                                        <Text fontSize="sm" color="#7E7E7E">
-                                            Already have an account ? {" "}
-                                        </Text>
-                                        <Text style={{ color: "#EDEDED", textDecorationLine: 'underline' }} onPress={() => navigation.navigate('Login')}>Log in</Text>
-                                    </HStack>
-                                </VStack>
-                            )}
-                        </Formik>
-                    </Box>
-                </Center>
-            </Center>
-        </NativeBaseProvider>
+        <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+                <Toast />
+                <View style={styles.container}>
+                    <Text style={styles.headingtext}>Reset Your Password</Text>
+                    <Text style={styles.subtext}>Type in your email and we'll send you a link to reset your password</Text>
+                    <Formik
+                        initialValues={{ email: '', password: '' }}
+                        onSubmit={(values) => { Forgotpasswordfun(values) }}
+                        validationSchema={yup.object().shape({
+                            email: yup
+                                .string()
+                                .email()
+                                .required('Email id is required'),
+                        })}
+                    >
+                        {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+                            <View>
+                                <View>
+                                    <Text style={styles.labletext}>Email</Text>
+                                    <TextInput
+                                        onChangeText={handleChange('email')}
+                                        onBlur={() => setFieldTouched('email')}
+                                        value={values.email}
+                                        style={styles.input}
+                                        placeholder="you@example.com"
+                                        placeholderTextColor="#707070" />
+                                    {touched.email && errors.email &&
+                                        <Text style={{ fontSize: 12, color: '#FF0D10' }}>{errors.email}</Text>
+                                    }
+                                </View>
+                                {error ? <Text style={{ fontSize: 15, color: '#FF0D10', textAlign: "center", top: 10 }}>{error}</Text> : ""}
+                                <View style={{ paddingTop: 30 }}>
+                                    <TouchableOpacity style={styles.button} onPress={handleSubmit}
+                                        disabled={!isValid}>
+                                        <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Send Reset Email</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flexDirection: "row", justifyContent: "center", paddingTop: 25 }}>
+                                    <Text style={{ color: "#7E7E7E" }}>
+                                        Already have an account ?{" "}
+                                    </Text>
+                                    <Text style={{ color: "#EDEDED", textDecorationLine: 'underline' }} onPress={() => navigation.navigate('Login')}>
+                                        Log in
+                                    </Text>
+                                </View>
+                            </View>
+                        )}
+                    </Formik>
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
@@ -119,11 +114,34 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor: '#34B27B',
         borderRadius: 10,
         width: 300,
         height: 40,
+        backgroundColor: "#34B27B",
+        alignItems: "center",
+        justifyContent: "center"
     },
+    headingtext: {
+        color: "white",
+        fontSize: 30,
+        fontWeight: "bold"
+    },
+    subtext: {
+        color: "#BBBBBB",
+        fontSize: 15,
+        paddingTop: 3,
+        width: "85%"
+    },
+    labletext: {
+        color: "#BBBBBB",
+        fontSize: 15,
+        paddingTop: 25,
+        paddingBottom: 5
+    },
+    container: {
+        paddingLeft: "12%",
+        top: "25%"
+    }
 });
 
 export default Forgotpassword;

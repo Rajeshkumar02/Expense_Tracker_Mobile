@@ -1,6 +1,5 @@
-import { NativeBaseProvider, View, Text, Center } from "native-base";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, TextInput } from "react-native";
+import { ScrollView, StyleSheet, TextInput, View, Text } from "react-native";
 import IdientifyIcon from '../../otherComponents/Icon';
 import { Button, Appbar } from 'react-native-paper';
 
@@ -76,7 +75,7 @@ function AddNewIncome({ navigation, route }) {
     }
 
     return (
-        <NativeBaseProvider>
+        <View style={{ flex: 1 }}>
             <Appbar.Header mode="small" elevated="false" style={[
                 {
                     backgroundColor: "#1C1C1C"
@@ -104,7 +103,7 @@ function AddNewIncome({ navigation, route }) {
                     </View>
                 </View>
             </ScrollView>
-        </NativeBaseProvider>
+        </View>
     );
 }
 

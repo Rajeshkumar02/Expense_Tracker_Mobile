@@ -1,11 +1,6 @@
-import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, ScrollView } from "native-base";
+import { TextInput, View, StyleSheet, ScrollView, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet } from "react-native";
 import { Appbar } from 'react-native-paper';
-
-//Validation
-import { Formik } from "formik";
-import * as yup from "yup";
 
 //Firebase
 import auth from '@react-native-firebase/auth';
@@ -47,7 +42,7 @@ function Changepassword({ navigation }) {
     }
 
     return (
-        <NativeBaseProvider>
+        <View style={{ flex: 1 }}>
             <Appbar.Header mode="small" elevated="false" style={[
                 {
                     backgroundColor: "#1C1C1C"
@@ -56,36 +51,29 @@ function Changepassword({ navigation }) {
                 <Appbar.BackAction color="white" onPress={() => { navigation.goBack() }} />
             </Appbar.Header>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-                <Center w="100%" height="100%">
-                    <Toast />
-                    <Box safeArea p="2" py="8" w="90%" maxW="290">
-                        <Heading size="xl" fontWeight="800" color="#EDEDED">
-                            Change Your Password
-                        </Heading>
-                        <Heading mt="1" color="#BBBBBB" fontWeight="medium" size="xs">
-                            We'll send you a link to Change your password to your email id
-                        </Heading>
-                        <VStack space={3} mt="5">
-                            <FormControl>
-                                <FormControl.Label><Text style={{ color: "#BBBBBB" }}>Email</Text></FormControl.Label>
-                                <TextInput
-                                    defaultValue={email}
-                                    style={styles.input}
-                                    editable={false}
-                                    placeholder="you@example.com"
-                                    placeholderTextColor="#707070" />
-                            </FormControl>
-                            <Button
-                                style={styles.button}
-                                mt="2"
-                                onPress={() => { Changepasswordfun(email) }}>
-                                <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>Send Email</Text>
-                            </Button>
-                        </VStack>
-                    </Box>
-                </Center>
+                <Toast />
+                <View style={styles.container}>
+                    <Text style={styles.headingtext}>Change Your Password</Text>
+                    <Text style={styles.subtext}>We'll send you a link to Change your password to your email id</Text>
+                    <View>
+                        <View>
+                            <Text style={styles.labletext}>Email</Text>
+                            <TextInput
+                                defaultValue={email}
+                                style={styles.input}
+                                editable={false}
+                                placeholder="you@example.com"
+                                placeholderTextColor="#707070" />
+                        </View>
+                        <View style={{ paddingTop: 30 }}>
+                            <TouchableOpacity style={styles.button} onPress={() => { Changepasswordfun(email) }}>
+                                <Text style={{ color: "white", fontWeight: "bold", fontSize: 17 }}>Send Reset Email</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
             </ScrollView>
-        </NativeBaseProvider>
+        </View>
     );
 }
 
@@ -103,11 +91,34 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        backgroundColor: '#34B27B',
         borderRadius: 10,
         width: 300,
         height: 40,
+        backgroundColor: "#34B27B",
+        alignItems: "center",
+        justifyContent: "center"
     },
+    headingtext: {
+        color: "white",
+        fontSize: 30,
+        fontWeight: "bold"
+    },
+    subtext: {
+        color: "#BBBBBB",
+        fontSize: 15,
+        paddingTop: 3,
+        width: "85%"
+    },
+    labletext: {
+        color: "#BBBBBB",
+        fontSize: 15,
+        paddingTop: 25,
+        paddingBottom: 5
+    },
+    container: {
+        paddingLeft: "12%",
+        top: "25%"
+    }
 });
 
 export default Changepassword;

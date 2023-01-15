@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { VStack, View, Input, IconButton, Text, NativeBaseProvider, Center, Box, Divider, Heading } from "native-base";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FAB, Avatar } from 'react-native-paper';
-import { TextInput, StyleSheet, Button, ScrollView, SafeAreaView, Image, FlatList, TouchableWithoutFeedback } from "react-native";
+import { TextInput, StyleSheet, Button, ScrollView, SafeAreaView, Image, FlatList, TouchableWithoutFeedback, Text, View } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import IdientifyIcon from '../../otherComponents/Icon';
 import Animation from "../../otherComponents/LoadingScreen";
@@ -87,6 +86,29 @@ function Expense() {
         }
     };
 
+    const DateFinder = (date) => {
+        currentDate = new Date();
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        let year = currentDate.getFullYear();
+        givenDate = new Date(date);
+        currentDate = new Date(year + "-" + month + "-" + day);
+        var YesterDay = new Date();
+        YesterDay.setDate(YesterDay.getDate() - 1);
+        let Yday = currentDate.getDate();
+        let Ymonth = currentDate.getMonth() + 1;
+        let Yyear = currentDate.getFullYear();
+        YesterDay = new Date(Yyear + "-" + Ymonth + "-" + Yday);
+        console.log("YesterDay", YesterDay);
+
+        if (currentDate.getDate() === givenDate.getDate()) {
+            return "Today";
+        } else if (YesterDay.getDate() === givenDate.getDate()) {
+            return "Yesterday"
+        }
+        return date;
+    }
+
     const ItemView = ({ item }) => {
         return (
             <TouchableWithoutFeedback onPress={() => getItem(item)}>
@@ -97,9 +119,9 @@ function Expense() {
                             <Text style={styles.summaryText}>
                                 {item.Id}
                             </Text>
-                            <Text style={styles.summarysecondaryText}>Rs. {Infotag[item.Id]?Infotag[item.Id].Amount:"----"}</Text>
+                            <Text style={styles.summarysecondaryText}>Rs. {Infotag[item.Id] ? Infotag[item.Id].Amount : "----"}</Text>
                         </View>
-                        <Text style={{ fontSize: 12, right: 10, position: "absolute", color: "#BBBBBB" }}>{Infotag[item.Id]?Infotag[item.Id].Date:"----"}</Text>
+                        <Text style={{ fontSize: 12, right: 10, position: "absolute", color: "#BBBBBB" }}>{Infotag[item.Id] ? DateFinder(Infotag[item.Id].Date) : "----"}</Text>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -117,51 +139,50 @@ function Expense() {
     };
 
     return (
-        <NativeBaseProvider>
-            <SafeAreaView style={{ backgroundColor: "#1C1C1C" }} width="100%" height="100%">
-                <Box safeArea p="4" py="8" w="90%" maxW="290">
-                    <Heading size="xl" fontWeight="800" color="#EDEDED">
-                        Expences
-                    </Heading>
-                </Box>
-                <View style={styles.inputContainer}>
-                    <Icon style={styles.icon} name="ios-search" size={20} color="#34b27b" />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Search"
-                        placeholderTextColor="white"
-                        onChangeText={(text) => searchFilterFunction(text)}
-                        value={search}
-                    />
-                </View>
-                {
-                    loading ?
-                        <Animation />
-                        :
-                        ExpenseData.length === 0
-                            ?
-                            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={[styles.noExpense, { color: "#34b27b" }]}>Click + to add New Category</Text>
-                            </View>
-                            :
-                            <View style={styles.screen}>
-                                <FlatList
-                                    data={filteredDataSource}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    ItemSeparatorComponent={ItemSeparatorView}
-                                    renderItem={ItemView}
-                                />
-
-                            </View>
-                }
-                <FAB
-                    style={styles.fab}
-                    small
-                    icon="plus"
-                    onPress={() => { navigation.navigate("AddExpense") }}
+        <SafeAreaView style={{ backgroundColor: "#1C1C1C" }} width="100%" height="100%">
+            <View style={{ width: "90%", paddingTop: "10%", paddingBottom: "8%" }}>
+                <Text style={{ fontSize: 30, fontWeight: "bold", color: "white", paddingLeft: 15 }}>Expense</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <Icon style={styles.icon} name="ios-search" size={20} color="#34b27b" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Search"
+                    placeholderTextColor="white"
+                    onChangeText={(text) => searchFilterFunction(text)}
+                    value={search}
                 />
-            </SafeAreaView>
-        </NativeBaseProvider>
+            </View>
+            {
+                loading ?
+                    <Animation />
+                    :
+                    ExpenseData.length === 0
+                        ?
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={[styles.noExpense, { color: "#34b27b" }]}>Click + to add New Category</Text>
+                        </View>
+                        :
+                        <View style={styles.screen}>
+                            <FlatList
+                                data={filteredDataSource}
+                                keyExtractor={(item, index) => index.toString()}
+                                ItemSeparatorComponent={ItemSeparatorView}
+                                renderItem={ItemView}
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
+                                overScrollMode={"never"}
+                            />
+
+                        </View>
+            }
+            <FAB
+                style={styles.fab}
+                small
+                icon="plus"
+                onPress={() => { navigation.navigate("AddExpense") }}
+            />
+        </SafeAreaView>
     );
 }
 

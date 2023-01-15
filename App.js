@@ -57,8 +57,11 @@ export default function App() {
 
   return (
     <NavigationContainer theme={MyTheme}>
-      <StatusBar style="auto" animated="true" />
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }} animationEnabled="false">
+      <StatusBar
+        animated={true}
+        backgroundColor="#000000"
+      />
+      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'none' }}>
         <>
           {isOffline
             ?

@@ -1,7 +1,5 @@
 import React from "react";
-import { SafeAreaView, ScrollView, View, TouchableWithoutFeedback } from "react-native";
-import { NativeBaseProvider, Box, Heading } from "native-base";
-import { Text } from "native-base";
+import { SafeAreaView, ScrollView, View, TouchableWithoutFeedback, Text } from "react-native";
 import Icon from 'react-native-vector-icons/Entypo';
 import Ant from 'react-native-vector-icons/AntDesign';
 
@@ -21,14 +19,12 @@ function Profile() {
     }
 
     return (
-        <NativeBaseProvider>
+        <View>
             <SafeAreaView style={{ backgroundColor: "#1C1C1C" }} width="100%" height="100%">
                 <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-                    <Box safeArea p="4" py="8" w="90%" maxW="290">
-                        <Heading size="xl" fontWeight="800" color="#EDEDED">
-                            Profile
-                        </Heading>
-                    </Box>
+                    <View style={{ width: "90%", paddingTop: "10%", paddingBottom: "8%" }}>
+                        <Text style={{ fontSize: 30, fontWeight: "bold", color: "white", paddingLeft: 15 }}>Profile</Text>
+                    </View>
                     <Icon name="user" size={100} color="white" style={{ alignSelf: "center" }} />
                     <Text style={{ textAlign: "center", color: "white", paddingTop: 20, fontSize: 15 }}>Email : {auth()._user.email}</Text>
                     <View style={{ paddingTop: 50, width: 90 + "%", left: 15 }}>
@@ -90,7 +86,7 @@ function Profile() {
                     </View>
                 </ScrollView>
             </SafeAreaView>
-        </NativeBaseProvider>
+        </View>
     );
 }
 

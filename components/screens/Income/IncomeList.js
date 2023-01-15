@@ -1,11 +1,7 @@
-import { NativeBaseProvider, View, Text } from "native-base";
 import React, { useEffect, useState, useRef } from "react";
 import { Appbar, Button, Card, Title } from 'react-native-paper';
-import { StyleSheet, FlatList, TouchableWithoutFeedback, Alert } from "react-native";
+import { StyleSheet, FlatList, TouchableWithoutFeedback, Alert, View, Text } from "react-native";
 import Animation from "../../otherComponents/LoadingScreen";
-
-//Toast
-import Toast from 'react-native-toast-message'
 
 //Firebase
 import firestore from '@react-native-firebase/firestore';
@@ -80,6 +76,29 @@ function IncomeList({ navigation, route }) {
         console.log(res);
     }
 
+    const DateFinder = (date) => {
+        currentDate = new Date();
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        let year = currentDate.getFullYear();
+        givenDate = new Date(date);
+        currentDate = new Date(year + "-" + month + "-" + day);
+        var YesterDay = new Date();
+        YesterDay.setDate(YesterDay.getDate() - 1);
+        let Yday = currentDate.getDate();
+        let Ymonth = currentDate.getMonth() + 1;
+        let Yyear = currentDate.getFullYear();
+        YesterDay = new Date(Yyear + "-" + Ymonth + "-" + Yday);
+        console.log("YesterDay", YesterDay);
+
+        if (currentDate.getDate() === givenDate.getDate()) {
+            return "Today";
+        } else if (YesterDay.getDate() === givenDate.getDate()) {
+            return "Yesterday"
+        }
+        return date;
+    }
+
     const ItemView = ({ item }) => {
         return (
             <View>
@@ -91,7 +110,7 @@ function IncomeList({ navigation, route }) {
                                 <View style={styles.content}>
                                     <Text style={{ color: "#707070", flexWrap: 'wrap', flexShrink: 1 }}>{Data[item].Note}</Text>
                                     <Text>{" "}</Text>
-                                    <Text style={{ color: "#707070" }}>{Data[item].Date}</Text>
+                                    <Text style={{ color: "#707070" }}>{DateFinder(Data[item].Date)}</Text>
                                 </View>
                             </Card.Content>
                         </Card>
@@ -149,7 +168,7 @@ function IncomeList({ navigation, route }) {
     }
 
     return (
-        <NativeBaseProvider>
+        <View style={{ flex: 1 }}>
             <Appbar.Header mode="small" elevated="false" style={[
                 {
                     backgroundColor: "#1C1C1C"
@@ -173,7 +192,7 @@ function IncomeList({ navigation, route }) {
                     />
             }
             <Button style={styles.addbutton} onPress={() => { navigation.navigate("AddNewIncome", { Icon: route.params.Icon, Iconfamily: route.params.Iconfamily, Id: route.params.Id, UserId: route.params.UserId }) }}><Text style={{ color: "white" }}>Add</Text></Button>
-        </NativeBaseProvider>
+        </View>
     );
 }
 
